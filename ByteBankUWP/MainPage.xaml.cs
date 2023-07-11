@@ -24,6 +24,7 @@ namespace ByteBankUWP
   public sealed partial class MainPage : Page
   {
     private AppServiceConnection deviceService;
+    Library lib = new Library();
 
     public MainPage()
     {
@@ -72,7 +73,6 @@ namespace ByteBankUWP
 
     private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
     {
-      // Add the connection.
       if (this.deviceService == null)
       {
         this.deviceService = new AppServiceConnection();
@@ -105,6 +105,15 @@ namespace ByteBankUWP
         }
         textBox.Text = result;
       }
+    }
+    private void GenerateLogs_Click(object sender, RoutedEventArgs e)
+    {
+      lib.GenerateLogs();
+    }
+
+    private void DeleteLogs_Click(object sender, RoutedEventArgs e)
+    {
+      lib.DeleteLogs();
     }
   }
 }
