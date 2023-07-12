@@ -17,24 +17,6 @@ namespace DeviceAppService
     private BackgroundTaskDeferral backgroundTaskDeferral;
     private AppServiceConnection appServiceconnection;
 
-    [DllImport("User32.dll", CharSet = CharSet.Unicode)]
-    private static extern int MessageBoxW(
-      IntPtr hWnd,
-      [param: MarshalAs(UnmanagedType.LPWStr)] string lpText,
-      [param: MarshalAs(UnmanagedType.LPWStr)] string lpCaption,
-      UInt32 utype);
-
-
-    [DllImport("Advapi32.dll", CharSet = CharSet.Unicode)]
-    private static extern bool GetUserNameW(
-      [param: MarshalAs(UnmanagedType.LPWStr)] StringBuilder lpBuffer,
-      ref UInt32 pcbBuffer);
-
-
-    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-    private static extern bool RemoveDirectory(string lpPathName);
-
-
     public void Run(IBackgroundTaskInstance taskInstance)
     {
       this.backgroundTaskDeferral = taskInstance.GetDeferral();
