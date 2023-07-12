@@ -8,6 +8,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation.Collections;
+using Windows.System;
 
 namespace DeviceAppService
 {
@@ -47,31 +48,21 @@ namespace DeviceAppService
 
     private async void OnRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
     {
-      await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync("ByteBankWin32");
-
       var messageDeferral = args.GetDeferral();
 
       ValueSet message = args.Request.Message;
       ValueSet returnData = new ValueSet();
 
-      //if (message.TryGetValue("ByteBankWin32", out object byteBankWin32) &&
-      //  message.TryGetValue("FolderPath", out object folderPath))
-      //{
-      //  // Execute o código relacionado ao processamento com os parâmetros recebidos
-      //  await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync(byteBankWin32.ToString());
-      //  //await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync("ByteBankWin32", new ValueSet { { "ByteBankWin32", "Caminho do ByteBankWin32" } });
-
-      //  returnData.Add("Result", "Rodou");
-      //  returnData.Add("Status", "OK");
-      //}
-      //else
-      //{
-      //  returnData.Add("Status", "Error");
-      //  returnData.Add("ErrorMessage", "Parâmetros inválidos");
-      //}
-
-      returnData.Add("Result", "Rodou");
-      returnData.Add("Status", "OK");
+      if (message.TryGetValue("FolderPath", out object folderPath))
+      {
+        returnData.Add("Result", "Success");
+        returnData.Add("Status", "OK");
+      }
+      else
+      {
+        returnData.Add("Status", "Error");
+        returnData.Add("ErrorMessage", "Parâmetros inválidos");
+      }
 
       await args.Request.SendResponseAsync(returnData);
 

@@ -155,6 +155,12 @@
       <Version>6.2.14</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeviceAppService\DeviceAppService.csproj">
+      <Project>{c7f64ca8-6c3f-4e52-b825-5647c0f8641a}</Project>
+      <Name>DeviceAppService</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

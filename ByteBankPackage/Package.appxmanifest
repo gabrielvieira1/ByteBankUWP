@@ -41,15 +41,20 @@
         <uap:SplashScreen Image="Images\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <uap:Extension Category="windows.appService" EntryPoint="DeviceAppService.DeviceService">
-          <uap:AppService Name="com.microsoft.deviceManager"/>
-        </uap:Extension>
         <desktop:Extension Category="windows.fullTrustProcess" Executable="ByteBankWin32\ByteBankWin32.exe">
           <desktop:FullTrustProcess>
             <desktop:ParameterGroup GroupId="ByteBankWin32" Parameters="ByteBankWin32"/>
             <desktop:ParameterGroup GroupId="FolderPath" Parameters="FolderPath"/>
           </desktop:FullTrustProcess>
         </desktop:Extension>
+        <uap:Extension Category="windows.protocol" EntryPoint="Windows.FullTrustApplication" Executable="ByteBankWin32/ByteBankWin32.exe">
+          <uap:Protocol Name="com.byte.bank.win32">
+            <uap:DisplayName>ByteBankWin32</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+        <uap:Extension Category="windows.appService" EntryPoint="DeviceAppService.DeviceService">
+          <uap:AppService Name="device-manager" ServerName="com.device.manager"/>
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>

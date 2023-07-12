@@ -11,7 +11,7 @@
   <Grid>
     <TextBox x:Name="textBox" Width="300" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     <TextBlock x:Name="textBlock" Width="300" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -100 0 0"/>
-    <ToggleSwitch OffContent="Remover consentimento" OnContent="Test2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 100 0 0" Toggled="ToggleSwitch_Toggled"></ToggleSwitch>
+    <ToggleSwitch OffContent="Não rastrear atividades" OnContent="Rastrear atividades" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 100 0 0" Toggled="ToggleSwitch_Toggled" IsOn="True"></ToggleSwitch>
   </Grid>
   <Page.BottomAppBar>
     <AppBar IsOpen="True" IsSticky="True">

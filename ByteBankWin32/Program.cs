@@ -48,17 +48,13 @@ namespace ByteBankWin32
 
     static void Main(string[] args)
     {
-      //string folderPath = message["FolderPath"] as string;
-      string byteBankWin32 = null;
+      string folderPath = null;
 
       if (args.Length > 0)
       {
-        byteBankWin32 = args[0] as string;
-        MessageBoxW(IntPtr.Zero, byteBankWin32, "This is window title", 0);
+        folderPath = args[0];
+        folderPath = folderPath.Substring(folderPath.IndexOf("=") + 1);
       }
-
-      string folderPath = "C:\\Users\\gabri\\AppData\\Local\\Packages\\dd5bb4d8-7cfb-4020-b052-2f963056038d_03w1eqkrn0fpt\\LocalState\\Logs";
-
 
       if (!string.IsNullOrEmpty(folderPath))
       {
