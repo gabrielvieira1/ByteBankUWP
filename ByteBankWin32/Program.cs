@@ -60,7 +60,7 @@ namespace ByteBankWin32
       {
         if (DeleteFolder(folderPath))
         {
-          MessageBoxW(IntPtr.Zero, "Folder deleted successfully.", "This is window title", 0);
+          MessageBoxW(IntPtr.Zero, "Todos os seus registros foram excluídos", "This is window title", 0);
         }
         else
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,6 +9,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.System;
 
 namespace DeviceAppService
@@ -35,10 +37,12 @@ namespace DeviceAppService
       ValueSet message = args.Request.Message;
       ValueSet returnData = new ValueSet();
 
+
       if (message.TryGetValue("FolderPath", out object folderPath))
       {
         returnData.Add("Result", "Success");
         returnData.Add("Status", "OK");
+        await Launcher.LaunchUriAsync(new Uri($"com.byte.bank.win32:///?folder={folderPath}")).AsTask();
       }
       else
       {
