@@ -4,8 +4,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace ByteBankWin32
 {
@@ -20,6 +23,9 @@ namespace ByteBankWin32
 
     [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
     private static extern bool RemoveDirectoryW(string lpPathName);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+    public static extern bool CreateDirectory(string lpPathName, IntPtr lpSecurityAttributes);
 
     private const int FO_DELETE = 3;
     private const int FOF_SILENT = 0x0004;
@@ -46,38 +52,113 @@ namespace ByteBankWin32
     [DllImport("shell32.dll", CharSet = CharSet.Auto)]
     private static extern int SHFileOperation(ref SHFILEOPSTRUCT lpFileOp);
 
+    private static string folderPath = null;
+    private static bool isToggleOn = false;
+
     static void Main(string[] args)
     {
-      string folderPath = null;
-
       if (args.Length > 0)
       {
-        folderPath = args[0];
-        folderPath = folderPath.Substring(folderPath.IndexOf("=") + 1);
-      }
+        ExtractArguments(args[0]);
 
-      if (!string.IsNullOrEmpty(folderPath))
-      {
-        if (DeleteFolder(folderPath))
+        //if ((!string.IsNullOrEmpty(folderPath)) && (IsValidFolderPath(folderPath)))
+        if (!string.IsNullOrEmpty(folderPath))
         {
-          MessageBoxW(IntPtr.Zero, "Todos os seus registros foram excluídos", "This is window title", 0);
+          if (isToggleOn)
+            CreateFolder(folderPath);
+          else
+            DeleteFolder(folderPath);
         }
-        else
-        {
-          MessageBoxW(IntPtr.Zero, "Failed to delete the folder.", "This is window title", 0);
-        }
-      }
-      else
-      {
-        MessageBoxW(IntPtr.Zero, "Failed to delete the folder.", "This is window title", 0);
       }
     }
-    private static bool DeleteFolder(string folderPath)
+
+    private static void ExtractArguments(string path)
+    {
+      folderPath = ExtractParameters(path, "folder");
+      isToggleOn = Convert.ToBoolean(ExtractParameters(path, "toggleSwitch"));
+
+    }
+
+    private static string ExtractParameters(string path, string parameter)
+    {
+      string folderPath = null;
+      Match folderMatch = Regex.Match(path, $"{parameter}=([^?]+)");
+      if (folderMatch.Success)
+      {
+        folderPath = folderMatch.Groups[1].Value;
+      }
+      return folderPath;
+    }
+    private static bool IsValidFolderPath(string folderPath)
+    {
+      string byteBankFolderPath = Path.GetFullPath(@"C:\ByteBank");
+
+      DirectoryInfo applicationDataFolder = new DirectoryInfo(byteBankFolderPath);
+      DirectoryInfo targetFolder = new DirectoryInfo(folderPath);
+
+      bool folderValid = targetFolder.FullName.StartsWith(applicationDataFolder.FullName, StringComparison.OrdinalIgnoreCase);
+
+        if (folderValid)
+          return true;
+        else
+          MessageBoxW(IntPtr.Zero, "Caminho do diretório inválido", "Byte Bank", 0);
+        return false;
+    }
+    private static void CreateFolder(string folderPath)
+    {
+      try
+      {
+        Directory.CreateDirectory(folderPath);
+
+        string logFilePath = Path.Combine(folderPath, "log.txt");
+
+        using (StreamWriter writer = File.CreateText(logFilePath))
+        {
+          for (int i = 0; i < 10; i++)
+          {
+            string logLine = $"{DateTime.Now.ToString()} - Click event #{i + 1}";
+            writer.WriteLine(logLine);
+          }
+        }
+
+        //MessageBoxW(IntPtr.Zero, "Pasta criada com sucesso", "Byte Bank", 0);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxW(IntPtr.Zero, "Falha ao criar a pasta " + ex.Message, "Byte Bank", 0);
+      }
+    }
+    private static void DeleteFolder(string folderPath)
+    {
+      try
+      {
+        Directory.Delete(folderPath, true);
+        MessageBoxW(IntPtr.Zero, "Todos os seus registros foram excluídos", "Byte Bank", 0);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxW(IntPtr.Zero, "Falha ao criar a pasta " + ex.Message, "Byte Bank", 0);
+      }
+    }
+    private static bool IsValidFolderPathInAppData(string folderPath)
+    {
+      string applicationDataFolderPath = ApplicationData.Current.LocalFolder.Path;
+
+      DirectoryInfo applicationDataFolder = new DirectoryInfo(applicationDataFolderPath);
+      DirectoryInfo targetFolder = new DirectoryInfo(folderPath);
+
+      return targetFolder.FullName.StartsWith(applicationDataFolder.FullName, StringComparison.OrdinalIgnoreCase);
+    }
+    private static bool CreateFolderWithWin32(string folderPath)
+    {
+      return CreateDirectory(folderPath, IntPtr.Zero);
+    }
+    private static bool DeleteFolderWithWin32(string folderPath)
     {
       SHFILEOPSTRUCT fileOp = new SHFILEOPSTRUCT
       {
         wFunc = FO_DELETE,
-        pFrom = folderPath + "\0\0", // Duas terminações nulas para indicar o final da lista de arquivos/pastas
+        pFrom = folderPath + "\0\0",
         fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_WANTNUKEWARNING
       };
 

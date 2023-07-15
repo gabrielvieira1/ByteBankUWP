@@ -38,11 +38,27 @@ namespace ByteBankUWP
 
     private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
     {
-      if (!IsToggleOn(sender))
+      string folderPath = Path.Combine("C:\\ByteBank", "Logs");
+      ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+
+      if (!toggleSwitch.IsOn)
       {
-        string folderPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Logs");
-        await Launcher.LaunchUriAsync(new Uri($"com.byte.bank.win32:///?folder={folderPath}"));
+        await Launcher.LaunchUriAsync(new Uri($"com.byte.bank.win32:///?folder={folderPath}?toggleSwitch=false"));
       }
+      else
+      {
+        await Launcher.LaunchUriAsync(new Uri($"com.byte.bank.win32:///?folder={folderPath}?toggleSwitch=true"));
+      }
+    }
+
+    private void GenerateLogs_Click(object sender, RoutedEventArgs e)
+    {
+      lib.GenerateLogs();
+    }
+
+    private void DeleteLogs_Click(object sender, RoutedEventArgs e)
+    {
+      lib.DeleteLogs();
     }
 
     private async Task<bool> createDeviceAppService()
@@ -65,31 +81,6 @@ namespace ByteBankUWP
         }
       }
       return true;
-    }
-
-    private void GenerateLogs_Click(object sender, RoutedEventArgs e)
-    {
-      lib.GenerateLogs();
-    }
-
-    private void DeleteLogs_Click(object sender, RoutedEventArgs e)
-    {
-      lib.DeleteLogs();
-    }
-
-    private bool IsToggleOn(object sender)
-    {
-      ToggleSwitch toggleSwitch = sender as ToggleSwitch;
-
-      if (!toggleSwitch.IsOn)
-      {
-        return false;
-      }
-      else
-      {
-        lib.GenerateLogs();
-        return true;
-      }
     }
   }
 }
