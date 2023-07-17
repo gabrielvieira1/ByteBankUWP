@@ -63,8 +63,9 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
-    <AppInstallerUri>C:\Users\gv.santos\Documents\workspaces\vs\ByteBankUWP\ByteBankPackage\AppPackages\</AppInstallerUri>
+    <AppInstallerUri>C:\Users\gabri\OneDrive\Documentos\workspaces\vs\ByteBankUWP\ByteBankPackage\AppPackages</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <AppxPackageDir>C:\Users\gabri\OneDrive\Documentos\workspaces\vs\ByteBankUWP\ByteBankPackage\AppPackages</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AppxBundle>Always</AppxBundle>

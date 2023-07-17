@@ -10,7 +10,7 @@
   <Identity
     Name="17b8585e-3de1-4032-9cff-6321d7eeb80a"
     Publisher="CN=gv.santos"
-    Version="1.0.0.0" />
+    Version="1.0.1.0" />
 
   <Properties>
     <DisplayName>ByteBankPackage</DisplayName>
