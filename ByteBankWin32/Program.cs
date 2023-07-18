@@ -65,9 +65,13 @@ namespace ByteBankWin32
         if (!string.IsNullOrEmpty(folderPath))
         {
           if (isToggleOn)
+          {
             CreateFolder(folderPath);
+          }
           else
+          {
             DeleteFolder(folderPath);
+          }
         }
       }
     }
@@ -98,11 +102,11 @@ namespace ByteBankWin32
 
       bool folderValid = targetFolder.FullName.StartsWith(applicationDataFolder.FullName, StringComparison.OrdinalIgnoreCase);
 
-        if (folderValid)
-          return true;
-        else
-          MessageBoxW(IntPtr.Zero, "Caminho do diretório inválido", "Byte Bank", 0);
-        return false;
+      if (folderValid)
+        return true;
+      else
+        MessageBoxW(IntPtr.Zero, "Caminho do diretório inválido", "Byte Bank", 0);
+      return false;
     }
     private static void CreateFolder(string folderPath)
     {
